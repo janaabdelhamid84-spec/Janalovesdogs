@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10131d">
+<title>Reel Prompt Studio</title>
+<style>
+:root{--bg:#0d1020;--panel:#171c30;--panel2:#202740;--ink:#f6f7fb;--muted:#b6bfd3;--line:#343d59;--accent:#a78bfa;--accent2:#67e8d2;--soft:#282342;--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 12% 0%,#252044 0,transparent 32rem),var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.wrap{max-width:1440px;margin:auto;padding:26px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.brand{display:flex;gap:13px;align-items:center}.mark{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111326;font-size:23px;font-weight:900}.brand h1{font-size:22px;margin:0;letter-spacing:-.5px}.brand p{margin:1px 0 0;color:var(--muted);font-size:13px}.pill{border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--muted);font-size:12px}
+.layout{display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);gap:22px;align-items:start}.panel{background:rgba(23,28,48,.94);border:1px solid var(--line);border-radius:var(--radius);padding:21px;box-shadow:0 14px 40px #0002}.panel h2{font-size:17px;margin:0 0 14px}.panel h3{font-size:14px;margin:20px 0 9px;color:#e4e7f2}.field{margin-bottom:13px}.field label{display:block;font-size:12px;font-weight:700;color:#d8def0;margin-bottom:6px}.field small,.hint{color:var(--muted);font-size:11px}.field input,.field select,.field textarea{width:100%;background:#0f1425;border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:10px 12px}.field textarea{min-height:76px;resize:vertical}.field input::placeholder,.field textarea::placeholder{color:#7f89a3}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.btn{border:1px solid var(--line);border-radius:11px;padding:9px 13px;background:#242b43;color:var(--ink);font-weight:700;font-size:13px}.btn.primary{background:linear-gradient(110deg,var(--accent),#8b9cff);border:0;color:#151329}.btn.subtle{background:transparent}.btn.danger{border-color:#704454;color:#ffc5d1}.btn:disabled{opacity:.45;cursor:not-allowed}
+.notice{background:#11182a;border:1px solid #3b4765;border-radius:12px;padding:11px 13px;color:#c6cee0;font-size:12px;margin-top:15px}.error{color:#ffb6c2;font-size:12px;margin:8px 0 0;min-height:18px}.right{display:grid;gap:18px}.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}.tab{border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 11px;border-radius:999px;font-size:12px}.tab[aria-selected="true"]{background:var(--soft);color:#fff;border-color:var(--accent)}
+.preview-grid{display:grid;grid-template-columns:minmax(220px,290px) 1fr;gap:22px;align-items:start}.phone{width:100%;max-width:270px;aspect-ratio:9/16;border:7px solid #090c15;border-radius:29px;background:var(--pbg,#201a36);position:relative;overflow:hidden;margin:auto;box-shadow:0 10px 30px #0006;color:var(--ptxt,#fff);transition:background .2s}.phone:before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,transparent 30%,#0008);pointer-events:none}.safe{position:absolute;inset:12% 7% 15%;border:1px dashed #ffffff80;border-radius:12px;pointer-events:none}.safe span{position:absolute;top:-22px;left:0;font-size:9px;color:#fff;background:#0008;padding:2px 5px;border-radius:5px}.phone-content{position:absolute;inset:0;padding:15% 9% 18%;display:flex;flex-direction:column;justify-content:center;text-align:center;z-index:1}.logo-preview{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8}.phone h2{font-size:clamp(19px,3vw,27px);line-height:1.08;margin:15px 0 10px;font-weight:900}.phone p{font-size:12px;line-height:1.4;margin:0}.phone .cta{margin-top:20px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.preview-info{color:var(--muted);font-size:12px}.swatches{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.swatch{width:35px;height:35px;border-radius:10px;border:2px solid #ffffff55;position:relative}.swatch[aria-pressed="true"]{outline:2px solid var(--accent2);outline-offset:3px}.palette-card{background:#111629;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px}.palette-card strong{font-size:12px}.palette-card p{font-size:11px;color:var(--muted);margin:3px 0 0}
+.output-section{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.output-section:first-child{border:0;padding:0;margin:0}.output-section h3{margin:0 0 10px}.item{background:#111629;border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}.item p{margin:5px 0 0;color:#dce1ee;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.item .meta{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}.item-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.mini{padding:5px 8px;font-size:11px}.scene{display:grid;grid-template-columns:75px 1fr;gap:12px}.time{font-weight:800;color:var(--accent2);font-size:12px}.scene h4{margin:0;font-size:13px}.scene p{font-size:12px}.promptbox{width:100%;min-height:105px;background:#0f1425;color:#f3f5fb;border:1px solid var(--line);border-radius:10px;padding:11px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical}.checklist{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{font-size:12px;color:#d6dced;display:flex;gap:7px;align-items:flex-start}.check b{color:var(--accent2)}.footer{color:#8792ad;font-size:11px;text-align:center;padding:22px 0 5px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.preview-grid{grid-template-columns:1fr 1fr}.phone{max-width:230px}}
+@media(max-width:560px){.wrap{padding:14px}.top{align-items:flex-start;flex-direction:column}.panel{padding:15px}.preview-grid{grid-template-columns:1fr}.phone{max-width:220px}.two{grid-template-columns:1fr 1fr}.checklist{grid-template-columns:1fr}.scene{grid-template-columns:58px 1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand"><div class="mark" aria-hidden="true">▶</div><div><h1>Reel Prompt Studio</h1><p>Plan better short-form videos, one scene at a time.</p></div></div><span class="pill">100% local · No AI credits · No sign-in</span></header>
+<main class="layout">
+<section class="panel" aria-labelledby="inputTitle">
+<h2 id="inputTitle">Build your reel plan</h2>
+<div class="field"><label for="topic">Topic *</label><textarea id="topic" maxlength="3000" placeholder="e.g. Why sleep matters for students"></textarea><small>Be as specific as you like. Up to 3,000 characters.</small></div>
+<div class="field"><label for="audience">Intended audience *</label><input id="audience" value="High school students" maxlength="100"></div>
+<div class="two">
+<div class="field"><label for="purpose">Purpose</label><select id="purpose"><option>Teach</option><option>Entertain</option><option>Explain</option><option>Inspire</option><option>Review</option><option>Tell a story</option></select></div>
+<div class="field"><label for="platform">Platform</label><select id="platform"><option>Instagram Reels</option><option>TikTok</option><option>YouTube Shorts</option></select></div>
+<div class="field"><label for="duration">Duration</label><select id="duration"><option value="15">15 seconds</option><option value="30" selected>30 seconds</option><option value="60">60 seconds</option></select></div>
+<div class="field"><label for="tone">Tone</label><select id="tone"><option>Informative</option><option>Funny</option><option>Dramatic</option><option>Calm</option><option>Bold</option><option>Mysterious</option></select></div>
+<div class="field"><label for="format">Format</label><select id="format"><option>Faceless explainer</option><option>Talking head</option><option>Mini-documentary</option><option>Tutorial</option><option>List</option><option>Myth versus fact</option><option>Before-and-after</option></select></div>
+<div class="field"><label for="style">Visual style</label><select id="style"><option>Editorial</option><option>Minimalist</option><option>Monochrome</option><option>Neon</option><option>Retro</option><option>Cinematic</option><option>Playful</option></select></div>
+</div>
+<div class="field"><label for="brand">Brand name (optional)</label><input id="brand" maxlength="70" placeholder="Your name or brand"></div>
+<div class="field"><label for="keywords">Three brand keywords</label><input id="keywords" value="clear, modern, trustworthy" maxlength="120"></div>
+<div class="field"><label for="colours">Colours to include or avoid (optional)</label><input id="colours" maxlength="120" placeholder="e.g. include lavender; avoid bright red"></div>
+<div class="field"><label for="cta">Call to action</label><input id="cta" value="Save this for later and share it with a friend." maxlength="180"></div>
+<div class="field"><label for="avoid">Avoid these things</label><textarea id="avoid" placeholder="e.g. complicated jargon, scary imagery" maxlength="500"></textarea></div>
+<div class="field"><label for="facts">Verified facts or source notes (optional)</label><textarea id="facts" placeholder="Add facts you have checked. The app will not invent statistics." maxlength="1000"></textarea></div>
+<div class="actions"><button class="btn primary" id="generate">Generate plan</button><button class="btn" id="example">Try an Example</button><button class="btn subtle" id="another">Another Version</button></div>
+<p class="error" id="error" role="alert" aria-live="polite"></p>
+<div class="actions"><button class="btn" id="save">Save draft</button><button class="btn danger" id="clear">Clear Saved Draft</button></div>
+<p class="hint" id="saveStatus" aria-live="polite">Drafts are saved only in this browser. They do not sync between devices.</p>
+<div class="notice">This tool builds prompts using templates and design rules. It does not call an AI service. It helps prepare prompts and production plans; it does not generate actual videos.</div>
+</section>
+<div class="right">
+<section class="panel">
+<h2>Live reel preview</h2>
+<div class="preview-grid">
+<div class="phone" id="phone" aria-label="Approximate vertical 9 by 16 reel preview"><div class="phone-content"><div class="logo-preview" id="previewBrand">YOUR BRAND</div><h2 id="previewTitle">Your next great idea starts here.</h2><p id="previewCaption">A clear, engaging short-form video made for your audience.</p><div class="cta" id="previewCTA">WATCH · LEARN · SHARE</div></div><div class="safe"><span>Approximate safe area</span></div></div>
+<div><p class="preview-info">A live 9:16 concept preview. Dashed guide is approximate; platform interface controls vary.</p><h3>Choose a colour palette</h3><div id="paletteChoices"></div><h3>Typography direction</h3><div class="field"><select id="typeface"><option value="bold">Bold sans-serif</option><option value="editorial">Editorial serif</option><option value="mono">Monospace</option><option value="rounded">Rounded</option><option value="condensed">Condensed</option></select></div><p class="preview-info" id="typeDescription">Strong display headings with a clean, readable system sans-serif body.</p></div>
+</div>
+</section>
+<section class="panel">
+<div class="tabs" role="tablist" aria-label="Plan sections">
+<button class="tab" role="tab" aria-selected="true" data-tab="plan">Reel plan</button><button class="tab" role="tab" aria-selected="false" data-tab="prompts">Copyable prompts</button><button class="tab" role="tab" aria-selected="false" data-tab="check">Plan check</button>
+</div>
+<div id="plan" class="tab-content">
+<div class="output-section"><h3>Opening hooks</h3><div id="hooks"><p class="hint">Generate a plan to see five hook ideas.</p></div></div>
+<div class="output-section"><h3>Timed storyboard</h3><div id="storyboard"><p class="hint">Your scenes will appear here, with timings adding up to the selected duration.</p></div></div>
+<div class="output-section"><h3>Captions and production ideas</h3><div id="captions"></div><div id="production"></div></div>
+<div class="output-section"><h3>Branding kit</h3><div id="brandkit"></div></div>
+<div class="actions"><button class="btn" id="copyPlan">Copy full plan</button><button class="btn" id="downloadPlan">Download plan (.txt)</button></div>
+</div>
+<div id="prompts" class="tab-content" hidden>
+<p class="hint">Each prompt is built from your selections. Copy one prompt or everything.</p>
+<div id="promptList"></div><div class="actions"><button class="btn primary" id="copyAll">Copy Everything</button></div>
+</div>
+<div id="check" class="tab-content" hidden>
+<h3>Honest plan check</h3><div id="checks" class="checklist"><p class="hint">Generate a plan to check its structure.</p></div>
+<p class="notice">Strong planning can improve a reel, but no tool can guarantee virality. Claims that need evidence are flagged rather than invented.</p>
+</div>
+</section>
+</div>
+</main>
+<footer class="footer">Made for thoughtful creators · Works offline · Your inputs stay in this browser</footer>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const palettes=[
+{name:"Violet Focus",bg:"#211b3d",text:"#fff9ff",accent:"#c4b5fd",desc:"Background: deep violet · Text: soft white · Accent: lavender"},
+{name:"Fresh Mint",bg:"#123b39",text:"#f1fffb",accent:"#78f0cf",desc:"Background: deep teal · Text: near-white · Accent: mint"},
+{name:"Warm Editorial",bg:"#f0dfc6",text:"#30251e",accent:"#b85c38",desc:"Background: warm cream · Text: dark brown · Accent: terracotta"}
+];
+let selectedPalette=0, currentPlan=null, version=0;
+const get= id=>$(id).value.trim();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function data(){return {topic:get("topic"),audience:get("audience"),purpose:get("purpose"),platform:get("platform"),duration:+get("duration"),tone:get("tone"),format:get("format"),style:get("style"),brand:get("brand"),keywords:get("keywords"),colours:get("colours"),cta:get("cta"),avoid:get("avoid"),facts:get("facts"),typeface:get("typeface")};}
+function setForm(d){Object.keys(d||{}).forEach(k=>{if($(k))$(k).value=d[k]??"";});updatePreview();}
+function choosePalette(i){selectedPalette=i;renderPalettes();updatePreview();}
+function renderPalettes(){
+$("paletteChoices").innerHTML=palettes.map((p,i)=>`<div class="palette-card"><div class="item-head"><strong>${p.name}</strong><button class="btn mini" data-palette="${i}" aria-pressed="${i===selectedPalette}">${i===selectedPalette?"Selected":"Use palette"}</button></div><div class="swatches"><button class="swatch" style="background:${p.bg}" aria-label="${p.name} background colour" data-palette="${i}" aria-pressed="${i===selectedPalette}"></button><button class="swatch" style="background:${p.text}" aria-label="${p.name} text colour" data-palette="${i}" aria-pressed="${i===selectedPalette}"></button><button class="swatch" style="background:${p.accent}" aria-label="${p.name} accent colour" data-palette="${i}" aria-pressed="${i===selectedPalette}"></button></div><p>${p.desc}</p></div>`).join("");
+}
+function updatePreview(){const d=data(),p=palettes[selectedPalette];$("phone").style.setProperty("--pbg",p.bg);$("phone").style.setProperty("--ptxt",p.text);$("previewBrand").textContent=d.brand||"YOUR BRAND";$("previewTitle").textContent=d.topic?d.topic.slice(0,70):"Your next great idea starts here.";$("previewCaption").textContent=`A ${d.tone.toLowerCase()} ${d.format.toLowerCase()} for ${d.audience||"your audience"}.`;$("previewCTA").textContent=d.cta?d.cta.slice(0,45):"WATCH · LEARN · SHARE";const fonts={bold:"Strong display headings with a clean, readable system sans-serif body.",editorial:"Expressive serif headings paired with a simple sans-serif body.",mono:"Technical monospace headings with generous line spacing.",rounded:"Friendly rounded system headings and a clear sans-serif body.",condensed:"Compact, bold system headings with a highly readable body."};$("typeDescription").textContent=fonts[d.typeface]||fonts.bold;$("phone").querySelector("h2").style.fontFamily=d.typeface==="editorial"?"Georgia,serif":d.typeface==="mono"?"ui-monospace,monospace":"system-ui,sans-serif";$("phone").querySelector("h2").style.letterSpacing=d.typeface==="condensed"? "-1px":"normal";}
+function splitTopic(topic){const clean=topic.replace(/\s+/g," ").trim();const chunks=clean.split(/[.!?;:]+/).map(x=>x.trim()).filter(Boolean);return chunks.length?chunks:[clean];}
+function buildPlan(d,alt){
+const bits=splitTopic(d.topic),subject=d.topic.length>100?d.topic.slice(0,100)+"…":d.topic;
+const angle=bits[0]||subject;
+const hooks=[
+`Question: Have you ever wondered about ${subject}?`,
+`Surprising angle: The part of ${subject} people often overlook.`,
+`Relatable problem: Struggling to understand ${subject}? Start here.`,
+`Challenge: Can you explain ${subject} in 15 seconds?`,
+`Visual opening: Begin with a close-up or bold on-screen phrase: “${subject}”.`
+];
+const sceneCount=d.duration===15?3:d.duration===30?4:6;
+const weights=d.duration===15?[3,5,4,3,0,0]:d.duration===30?[3,7,8,7,5,0]:[4,10,12,12,12,10];
+const durations=weights.slice(0,sceneCount);
+const titles=["The hook","Set the context","The key idea","Show it clearly","Make it useful","The takeaway"];
+const visuals=["Open on a striking close-up, movement or a bold title card.","Show the everyday situation or question behind the topic.","Introduce the central idea using one simple visual metaphor.","Demonstrate the idea with a short example, labelled graphic or action.","Give the audience one practical takeaway or next step.","End on a calm, memorable final frame and the call to action."];
+const lines=[`“${angle} — here's why it matters.”`,`“First, understand the context. Keep it simple and relatable.”`,`“The main point is ${angle}. Explain it in one clear thought.”`,`“Use a concrete example to make the idea easy to remember.”`,`“Try one small action and notice what changes.”`,`“That's the takeaway. Save this and come back to it.”`];
+const scenes=[];let t=0;
+for(let i=0;i<sceneCount;i++){const start=t;t+=durations[i];scenes.push({start,end:t,duration:durations[i],title:titles[i],visual:visuals[i],voice:lines[i],screen:[ "A question worth asking","Context first","One clear idea","See it in action","Try this next","Remember this"][i],transition:i===0?"Quick cut":"Match cut or gentle dissolve"});}
+const captions=[`${subject}: a simple breakdown for ${d.audience}.`,`A fresh way to look at ${subject}. Keep this handy.`,`One topic, a few clear ideas, and a takeaway you can use.`];
+const tags=["#LearnSomething","#QuickExplainer","#CreativeIdeas","#StudentCreators","#ShortFormVideo"];
+const production=[`Filming: Use ${d.format.toLowerCase()} framing; record each scene separately and keep the lens at eye level.`,`Lighting: Face a window or use a soft light source; avoid a bright window directly behind the subject.`,`Framing: Keep the main subject centred within the approximate safe area; leave room for captions.`,`Editing: Cut pauses, use simple transitions, and hold key text long enough to read.`,`Audio: Choose a ${d.tone.toLowerCase()} instrumental mood that is properly licensed for your platform. Add subtitles and check contrast.`];
+const palette=palettes[selectedPalette];
+const promptBase=`Topic: ${d.topic}\nAudience: ${d.audience}\nPurpose: ${d.purpose}; Platform: ${d.platform}; Duration: ${d.duration}s\nTone: ${d.tone}; Format: ${d.format}; Visual style: ${d.style}\nBrand: ${d.brand||"None"}; Keywords: ${d.keywords}\nPalette: ${palette.name} (${palette.bg}, ${palette.text}, ${palette.accent})\nTypography: ${d.typeface}; Colour notes: ${d.colours||"Use selected palette"}\nCall to action: ${d.cta||"Choose a relevant CTA"}\nAvoid: ${d.avoid||"Unsupported claims, clutter and unreadable text"}\nVerified notes: ${d.facts||"[add a verified fact and source if factual claims are needed]"}\nAccessibility: Include readable high-contrast captions, meaningful labels, and do not rely on colour alone.`;
+const prompts=[
+["Full reel production brief",`Create a practical production brief for a ${d.duration}-second ${d.platform} video.\n${promptBase}\nProvide a clear opening, useful middle and satisfying ending. Include scene-by-scene visuals, voiceover, on-screen text, transitions, filming, lighting, framing and editing guidance. Keep all scene timings exact. Do not invent facts or statistics.`],
+["Video-generation prompt",`Create a vertical 9:16 short-form video concept. ${promptBase}\nUse coherent visual continuity, clear scene changes and natural pacing. Do not render long paragraphs of text inside the video. If the video tool cannot reproduce exact lettering accurately, add exact lettering and captions during editing. Avoid: ${d.avoid||"clutter and unsupported claims"}.`],
+["Image or thumbnail prompt",`Design a striking 9:16 cover image for a short-form video. ${promptBase}\nUse one clear focal subject, a strong composition, ample negative space and a short headline that remains readable on a phone. Keep important content inside a central safe area. Avoid misleading imagery.`],
+["Logo and branding prompt",`Create a simple, adaptable logo and mini brand direction. ${promptBase}\nBrand keywords: ${d.keywords}. Provide a recognisable mark, wordmark treatment, palette roles (background, text, accent), and small-size legibility guidance. Do not imitate an existing brand.`],
+["Scriptwriting prompt",`Write a concise spoken script for a ${d.duration}-second video. ${promptBase}\nUse natural spoken language, short sentences and realistic narration timing. Structure it with a hook, context, main explanation and ending. Include matching on-screen captions. Do not make unsupported factual claims.`]
+];
+return {d,subject,hooks,scenes,captions,tags,production,palette,prompts,alt};
+}
+function render(){
+const p=currentPlan;if(!p)return;
+$("hooks").innerHTML=p.hooks.map((h,i)=>`<div class="item"><div class="item-head"><span class="meta">Hook ${i+1}</span><button class="btn mini" data-copy="${esc(h)}">Copy</button></div><p>${esc(h)}</p></div>`).join("");
+$("storyboard").innerHTML=p.scenes.map(s=>`<div class="item scene"><div class="time">${s.start}–${s.end}s<br>${s.duration}s</div><div><h4>${esc(s.title)}</h4><p><b>Visual:</b> ${esc(s.visual)}</p><p><b>Voiceover:</b> ${esc(s.voice)}</p><p><b>On-screen:</b> ${esc(s.screen)} · <b>Transition:</b> ${esc(s.transition)}</p></div></div>`).join("")+`<p class="hint">Total scene time: ${p.scenes.reduce((a,s)=>a+s.duration,0)} seconds.</p>`;
+$("captions").innerHTML=`<h3>Caption options</h3>`+p.captions.map((c,i)=>`<div class="item"><div class="item-head"><span class="meta">Caption ${i+1}</span><button class="btn mini" data-copy="${esc(c)}">Copy</button></div><p>${esc(c)}</p></div>`).join("")+`<div class="item"><span class="meta">Hashtag suggestions · not live trend data</span><p>${esc(p.tags.join("  "))}</p></div>`;
+$("production").innerHTML=`<h3>Production ideas</h3>`+p.production.map(x=>`<div class="item"><p>${esc(x)}</p></div>`).join("");
+$("brandkit").innerHTML=`<div class="palette-card"><strong>${esc(p.palette.name)}</strong><p>${esc(p.palette.desc)}</p><div class="swatches">${[p.palette.bg,p.palette.text,p.palette.accent].map(c=>`<span class="swatch" style="background:${c}" title="${c}"></span>`).join("")}</div><p>HEX: ${p.palette.bg} · ${p.palette.text} · ${p.palette.accent}</p></div><p class="hint">Typography: ${esc(p.d.typeface)}. Heading/body pairing uses device system fonts; font availability varies by device.</p>`;
+$("promptList").innerHTML=p.prompts.map((a,i)=>`<div class="item"><div class="item-head"><strong>${esc(a[0])}</strong><button class="btn mini" data-prompt="${i}">Copy prompt</button></div><textarea class="promptbox" readonly aria-label="${esc(a[0])}">${a[1]}</textarea></div>`).join("");
+const d=p.d, checks=[
+["Topic and audience are clear",!!d.topic&&!!d.audience],
+["Opening hook is included",p.hooks.length===5],
+["Scene timings match selected duration",p.scenes.reduce((a,s)=>a+s.duration,0)===d.duration],
+["Narration is structured for the available time",p.scenes.length>0],
+["On-screen text is short and readable",p.scenes.every(s=>s.screen.length<45)],
+["Call to action is included",!!d.cta],
+["Factual claims need source checking",!d.facts||d.facts.length>0]
+];
+$("checks").innerHTML=checks.map(c=>`<div class="check"><b>${c[1]?"✓":"!"}</b><span>${esc(c[0])}${c[0].includes("Factual")&&d.facts?" — check supplied sources":" "}</span></div>`).join("");
+}
+function generate(alt=false){const d=data();if(!d.topic||!d.audience){$("error").textContent="Please add a topic and intended audience before generating your plan.";return;}if(d.topic.length>3000){$("error").textContent="Please shorten the topic to 3,000 characters or fewer.";return;}$("error").textContent="";version=alt?version+1:0;currentPlan=buildPlan(d,version);render();updatePreview();}
+function planText(){if(!currentPlan)return "";const p=currentPlan;return `REEL PROMPT STUDIO — REEL PLAN\nTopic: ${p.d.topic}\nAudience: ${p.d.audience}\nPlatform: ${p.d.platform} | Duration: ${p.d.duration}s | Tone: ${p.d.tone}\n\nHOOKS\n${p.hooks.map((x,i)=>`${i+1}. ${x}`).join("\n")}\n\nSTORYBOARD\n${p.scenes.map(s=>`${s.start}-${s.end}s ${s.title}\nVisual: ${s.visual}\nVoiceover: ${s.voice}\nOn-screen: ${s.screen}\nTransition: ${s.transition}`).join("\n\n")}\n\nCAPTIONS\n${p.captions.join("\n")}\n\nHASHTAG SUGGESTIONS\n${p.tags.join(" ")}\n\nPRODUCTION\n${p.production.join("\n")}\n\nBRANDING\n${p.palette.name}: ${p.palette.bg}, ${p.palette.text}, ${p.palette.accent}\n\nPROMPTS\n${p.prompts.map(x=>x[0]+"\n"+x[1]).join("\n\n")}\n\nNote: This tool uses local templates and does not call an AI service.`;}
+async function copyText(text){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);}else{const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();if(!ok)throw Error("Copy unavailable");}return true;}catch(e){$("error").textContent="Copy was blocked by this browser. Select the text and copy it manually.";return false;}}
+function download(name,text){const blob=new Blob([text],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
+function safeStorage(){try{const k="reelPromptStudioDraft";localStorage.setItem(k,"test");localStorage.removeItem(k);return localStorage;}catch(e){return null;}}
+$("generate").addEventListener("click",()=>generate(false));$("another").addEventListener("click",()=>generate(true));
+$("example").addEventListener("click",()=>{setForm({topic:"How small daily habits can make studying more effective",audience:"High school students",purpose:"Teach",platform:"Instagram Reels",duration:"30",tone:"Informative",format:"Faceless explainer",style:"Editorial",brand:"Study Spark",keywords:"encouraging, clear, practical",colours:"Lavender and mint; avoid harsh neon",cta:"Save this study tip and try it today.",avoid:"Unrealistic promises, pressure and complicated jargon",facts:"Use verified learning-science sources if making specific research claims."});generate(false);});
+$("save").addEventListener("click",()=>{const store=safeStorage();if(!store){$("saveStatus").textContent="Browser storage is unavailable. Your draft could not be saved.";return;}try{store.setItem("reelPromptStudioDraft",JSON.stringify({form:data(),palette:selectedPalette}));$("saveStatus").textContent="Draft saved in this browser only. It does not sync between devices.";}catch(e){$("saveStatus").textContent="Could not save: this browser may have limited storage."; }});
+$("clear").addEventListener("click",()=>{try{localStorage.removeItem("reelPromptStudioDraft");$("saveStatus").textContent="Saved draft cleared from this browser.";}catch(e){$("saveStatus").textContent="Browser storage is unavailable; there was no saved draft to clear."; }});
+try{const saved=localStorage.getItem("reelPromptStudioDraft");if(saved){const parsed=JSON.parse(saved);setForm(parsed.form||{});if(Number.isInteger(parsed.palette)&&parsed.palette>=0&&parsed.palette<palettes.length)selectedPalette=parsed.palette;renderPalettes();$("saveStatus").textContent="A saved draft was restored from this browser. It does not sync between devices.";}}catch(e){$("saveStatus").textContent="Browser storage is unavailable. You can still use the studio without saving.";}
+document.addEventListener("input",e=>{if(e.target.closest(".field")||e.target.id==="typeface")updatePreview();});
+$("paletteChoices").addEventListener("click",e=>{const b=e.target.closest("[data-palette]");if(b)choosePalette(+b.dataset.palette);});
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t===b)));document.querySelectorAll(".tab-content").forEach(c=>c.hidden=c.id!==b.dataset.tab);});
+document.addEventListener("click",e=>{const c=e.target.closest("[data-copy]");if(c)copyText(c.dataset.copy);const p=e.target.closest("[data-prompt]");if(p&&currentPlan)copyText(currentPlan.prompts[+p.dataset.prompt][1]);});
+$("copyPlan").addEventListener("click",()=>currentPlan?copyText(planText()):$("error").textContent="Generate a plan first.");
+$("downloadPlan").addEventListener("click",()=>currentPlan?download("reel-plan.txt",planText()):$("error").textContent="Generate a plan first.");
+$("copyAll").addEventListener("click",()=>currentPlan?copyText(currentPlan.prompts.map(x=>x[0]+"\n"+x[1]).join("\n\n---\n\n")):$("error").textContent="Generate a plan first.");
+renderPalettes();updatePreview();
+})();
+</script>
+</body>
+</html>
